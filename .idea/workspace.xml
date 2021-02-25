@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="2884286d-ba7f-4a73-8dcd-9cd81162cf54" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExportToHTMLSettings">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../SpringSecurity\exportToHTML" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="$PROJECT_DIR$/../../../Tools/apache-maven-3.6.3" />
+        <option name="outputLevel" value="DEBUG" />
+        <option name="userSettingsFile" value="H:\Tools\apache-maven-3.6.3\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1oyJrHMeNOU1LSX0VYc0HqLqKiQ" />
+  <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="jdk.selected.JAVA_MODULE" value="11" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/自定义用户认证/src/main/java/com/xch/demo" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15527344" />
+    <property name="project.structure.side.proportion" value="0.49074075" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="H:\WorkSpace\idea\SpringSecurity\自定义用户认证\src\main\resources\resources" />
+      <recent name="H:\WorkSpace\idea\SpringSecurity\自定义用户认证\src\main\resources" />
+      <recent name="H:\WorkSpace\idea\SpringSecurity\自定义用户认证\src\main\resources\templates" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="H:\WorkSpace\idea\SpringSecurity\自定义用户认证\src\main\java\com\xch\demo" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.DemoApplication (1)">
+    <configuration name="DemoApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="自定义用户认证" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.xch.demo.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.xch.demo.DemoApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DemoApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="hello-world" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.xch.demo.DemoApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.DemoApplication (1)" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2884286d-ba7f-4a73-8dcd-9cd81162cf54" name="Default Changelist" comment="" />
+      <created>1614253093801</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1614253093801</updated>
+      <workItem from="1614253097053" duration="997000" />
+      <workItem from="1614254109331" duration="12106000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="440" y="91" key="#Project_Structure" timestamp="1614253145693">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state x="440" y="91" key="#Project_Structure/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614253145693" />
+    <state x="755" y="192" key="#com.intellij.ide.util.MemberChooser" timestamp="1614263993718">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state x="755" y="192" key="#com.intellij.ide.util.MemberChooser/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614263993717" />
+    <state x="715" y="134" key="#xdebugger.evaluate" timestamp="1614262681331">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state x="715" y="134" key="#xdebugger.evaluate/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614262681331" />
+    <state x="746" y="204" key="FileChooserDialogImpl" timestamp="1614253839237">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state x="746" y="204" key="FileChooserDialogImpl/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614253839237" />
+    <state width="1879" height="380" key="GridCell.Tab.0.bottom" timestamp="1614265811105">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state width="1879" height="380" key="GridCell.Tab.0.bottom/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614265811105" />
+    <state width="1879" height="380" key="GridCell.Tab.0.center" timestamp="1614265811104">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state width="1879" height="380" key="GridCell.Tab.0.center/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614265811104" />
+    <state width="1879" height="380" key="GridCell.Tab.0.left" timestamp="1614265811104">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state width="1879" height="380" key="GridCell.Tab.0.left/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614265811104" />
+    <state width="1879" height="380" key="GridCell.Tab.0.right" timestamp="1614265811104">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state width="1879" height="380" key="GridCell.Tab.0.right/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614265811104" />
+    <state width="1879" height="380" key="GridCell.Tab.1.bottom" timestamp="1614265888265">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state width="1879" height="380" key="GridCell.Tab.1.bottom/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614265888265" />
+    <state width="1879" height="380" key="GridCell.Tab.1.center" timestamp="1614265888265">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state width="1879" height="380" key="GridCell.Tab.1.center/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614265888265" />
+    <state width="1879" height="380" key="GridCell.Tab.1.left" timestamp="1614265888265">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state width="1879" height="380" key="GridCell.Tab.1.left/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614265888265" />
+    <state width="1879" height="380" key="GridCell.Tab.1.right" timestamp="1614265888265">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state width="1879" height="380" key="GridCell.Tab.1.right/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614265888265" />
+    <state width="1879" height="380" key="GridCell.Tab.2.bottom" timestamp="1614265810956">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state width="1879" height="380" key="GridCell.Tab.2.bottom/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614265810956" />
+    <state width="1879" height="380" key="GridCell.Tab.2.center" timestamp="1614265810956">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state width="1879" height="380" key="GridCell.Tab.2.center/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614265810956" />
+    <state width="1879" height="380" key="GridCell.Tab.2.left" timestamp="1614265810956">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state width="1879" height="380" key="GridCell.Tab.2.left/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614265810956" />
+    <state width="1879" height="380" key="GridCell.Tab.2.right" timestamp="1614265810956">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state width="1879" height="380" key="GridCell.Tab.2.right/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614265810956" />
+    <state x="490" y="171" key="Maven.ArtifactSearchDialog" timestamp="1614253435423">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state x="490" y="171" key="Maven.ArtifactSearchDialog/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614253435423" />
+    <state x="440" y="91" key="SettingsEditor" timestamp="1614259834969">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state x="440" y="91" key="SettingsEditor/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614259834969" />
+    <state x="248" y="147" key="new project wizard" timestamp="1614255258173">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state x="248" y="147" key="new project wizard/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614255258173" />
+    <state x="623" y="223" width="672" height="678" key="search.everywhere.popup" timestamp="1614258397946">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state x="623" y="223" width="672" height="678" key="search.everywhere.popup/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614258397946" />
+    <state x="502" y="116" key="spring file set editor" timestamp="1614259634427">
+      <screen x="0" y="0" width="1920" height="1034" />
+    </state>
+    <state x="502" y="116" key="spring file set editor/-1920.0.1920.1034/0.0.1920.1034@0.0.1920.1034" timestamp="1614259634427" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/hello-world/src/main/java/com/xch/demo/controller/TestController.java</url>
+          <line>13</line>
+          <properties class="com.xch.demo.controller.TestController" method="login">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/自定义用户认证/src/main/java/com/xch/demo/demo/service/MyUserDetailService.java</url>
+          <line>29</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

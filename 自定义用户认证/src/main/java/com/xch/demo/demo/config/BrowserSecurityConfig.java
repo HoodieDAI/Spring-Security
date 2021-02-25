@@ -1,0 +1,44 @@
+package com.xch.demo.demo.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+/**
+ * @author 许昌豪
+ * @version 1.0
+ * @date 2021/2/25 20:02
+ */
+@Configuration
+public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.formLogin()
+//                .loginPage("/login.html") //配置登录页面请求URL
+                .loginPage("/authentication/require")
+                .loginProcessingUrl("/login") //对应页面表单 form 的action=“/login"
+                .successHandler(authenticationSuccessHandler)
+                .and()
+                .authorizeRequests() //授权配置
+                .antMatchers("/authentication/require", "/login.html").permitAll() // 跳转 /login.html 请求不会被拦截
+                .anyRequest() //所有请求
+                .authenticated() //都需要认证
+                .and().csrf().disable();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+
+}
