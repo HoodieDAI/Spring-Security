@@ -527,7 +527,7 @@ Spring Security 为我们提供了一套默认的处理成功和失败 的方法
 
 我们可以自定义处理成功和失败的机制 
 
-#### 改变成功机制
+#### 自定义成功机制
 
 ##### 打印 认证信息 `Authentication`
 
@@ -675,4 +675,74 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
   ```
 
   这里 成功后都打印`Autentication`信息
+
+#### 自定义失败机制
+
+- ##### 实现`AuthenticationFailureHandler` 接口 的`onAuthenticationFailure`方法
+
+```java
+@Component
+public class MyAuthenticationFailureHandler implements AuthenticationFailureHandler {
+
+    @Autowired
+    private ObjectMapper mapper;
+
+    @Override
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
+        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(mapper.writeValueAsString(e.getMessage()));
+    }
+}
+```
+
+`AuthenticationException`是一个抽象类，Spring Security 为登录失败的原因提供了很多实现类
+
+不同的失败原因抛出不同的异常
+
+如果错误输入用户名和密码则抛出`BadCredentialsException`
+
+用户不存在抛出`UsernameNotFoundException`
+
+用户被锁定抛出`LockedException`
+
+以下是继承AuthenticaionException的所有异常类（`ctrl+h 调出`）
+
+![image-20210228123113898](C:\Users\51910\AppData\Roaming\Typora\typora-user-images\image-20210228123113898.png)
+
+- ##### 在继承了`WebSecurityConfigurerAdapter` 的配置类进行配置
+
+```java
+@Configuration
+public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
+
+    @Autowired
+    private AuthenticationFailureHandler authenticationFailureHandler;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.formLogin()
+//                .loginPage("/login.html") //配置登录页面请求URL
+                .loginPage("/authentication/require")
+                .loginProcessingUrl("/login") //对应页面表单 form 的action=“/login"
+                .successHandler(authenticationSuccessHandler) //配置成功处理机制
+                .failureHandler(authenticationFailureHandler) //配置失败处理机制
+                .and()
+                .authorizeRequests() //授权配置
+                .antMatchers("/authentication/require", "/login.html").permitAll() // 跳转 /login.html 请求不会被拦截
+                .anyRequest() //所有请求
+                .authenticated() //都需要认证
+                .and().csrf().disable();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+}
+```
 
