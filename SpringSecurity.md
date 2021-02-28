@@ -746,3 +746,446 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 }
 ```
 
+## 添加图形验证码
+
+> #### 前提：
+>
+> 验证码因该在验证账户密码之前完成
+>
+> ##### 又因为：Spring Security 认证校验是由 UsernamePasswordAuthenticationFilter 完成的
+>
+> ##### 所以：我们要在UsernamePasswordAuthenticationFilter ==之前== 添加一个过滤器，来处理验证码的校验功能
+
+### 具体步骤
+
+- #### 1. 添加依赖
+
+  ```xml
+   <dependency>
+      <groupId>org.springframework.social</groupId>
+      <artifactId>spring-social-config</artifactId>
+  </dependency>
+  ```
+
+  这个依赖里的*org.springframework.social.connect.web.HttpSessionSessionStrategy* 对象 封装了对Session处理的方法
+
+  使用它的目的是 **将验证码对象存储到Session中，并通过IO流将生成的图片输出到登录页面上**
+
+  （我们也可以存在缓存Redis中，就不用这个依赖了）
+
+- #### 2. 验证码实体对象
+
+```java
+public class ImageCode {
+
+    private BufferedImage image;
+
+    private String code;
+
+    private LocalDateTime expireTime;
+
+    public ImageCode(BufferedImage image, String code, int expireIn) {
+        this.image = image;
+        this.code = code;
+        this.expireTime = LocalDateTime.now().plusSeconds(expireIn);
+    }
+
+    public ImageCode(BufferedImage image, String code, LocalDateTime expireTime) {
+        this.image = image;
+        this.code = code;
+        this.expireTime = expireTime;
+    }
+
+    boolean isExpire() {
+        return LocalDateTime.now().isAfter(expireTime);
+    }
+    // get,set 略
+}
+```
+
+- #### 3. 处理生成验证码的接口
+
+```java
+@Controller
+public class ValidateController {
+
+    public final static String SESSION_KEY_IMAGE_CODE = "SESSION_KEY_IMAGE_CODE";
+
+    private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
+
+    @GetMapping("/code/image")
+    public void createCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        ImageCode imageCode = createImageCode();
+        sessionStrategy.setAttribute(new ServletWebRequest(request), SESSION_KEY_IMAGE_CODE, imageCode);
+        ImageIO.write(imageCode.getImage(), "jpeg", response.getOutputStream());
+    }
+
+}
+```
+
+步骤解释：
+
+1. 生成验证码对象
+2. 将该对象存入Session，其中Attribute的key是*SESSION_KEY_IMAGE_CODE*
+3. 用ImageIO将图片信息输出到页面上
+
+
+
+**createImageCode()方法**
+
+```java
+private ImageCode createImageCode() {
+
+    int width = 100; // 验证码图片宽度
+    int height = 36; // 验证码图片长度
+    int length = 4; // 验证码位数
+    int expireIn = 60; // 验证码有效时间 60s
+
+    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+    Graphics g = image.getGraphics();
+
+    Random random = new Random();
+
+    g.setColor(getRandColor(200, 250));
+    g.fillRect(0, 0, width, height);
+    g.setFont(new Font("Times New Roman", Font.ITALIC, 20));
+    g.setColor(getRandColor(160, 200));
+    for (int i = 0; i < 155; i++) {
+        int x = random.nextInt(width);
+        int y = random.nextInt(height);
+        int xl = random.nextInt(12);
+        int yl = random.nextInt(12);
+        g.drawLine(x, y, x + xl, y + yl);
+    }
+
+    StringBuilder sRand = new StringBuilder();
+    for (int i = 0; i < length; i++) {
+        String rand = String.valueOf(random.nextInt(10));
+        sRand.append(rand);
+        g.setColor(new Color(20 + random.nextInt(110), 20 + random.nextInt(110), 20 + random.nextInt(110)));
+        g.drawString(rand, 13 * i + 6, 16);
+    }
+    g.dispose();
+    return new ImageCode(image, sRand.toString(), expireIn);
+}
+
+private Color getRandColor(int fc, int bc) {
+    Random random = new Random();
+    if (fc > 255) {
+        fc = 255;
+    }
+    if (bc > 255) {
+        bc = 255;
+    }
+    int r = fc + random.nextInt(bc - fc);
+    int g = fc + random.nextInt(bc - fc);
+    int b = fc + random.nextInt(bc - fc);
+    return new Color(r, g, b);
+}
+```
+
+- #### 4. 为登录页加上验证码输入框和验证码图片
+
+```html
+<span style="display: inline">
+    <input type="text" name="imageCode" placeholder="验证码" style="width: 50%;"/>
+    <img src="/code/image"/>
+</span>
+```
+
+- #### 5. 在继承了`WebSecurityConfigurerAdapter`的配置类中为`/code/image`配置免拦截
+
+```java
+@Configuration
+public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
+
+    @Autowired
+    private AuthenticationFailureHandler authenticationFailureHandler;
+
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.formLogin()
+                .loginPage("/authentication/require")
+                .loginProcessingUrl("/login") //对应页面表单 form 的action=“/login"
+                .successHandler(authenticationSuccessHandler) //配置成功处理机制
+                .failureHandler(authenticationFailureHandler) //配置失败处理机制
+                .and()
+                .authorizeRequests() //授权配置
+                .antMatchers("/authentication/require", "/login.html", "/code/image").permitAll() // 跳转 /login.html 请求不会被拦截
+                .anyRequest() //所有请求
+                .authenticated() //都需要认证
+                .and().csrf().disable();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+}
+```
+
+
+
+- ##### 到这一步就可以在登录页看到验证码了
+
+![image-20210228210413809](C:\Users\51910\AppData\Roaming\Typora\typora-user-images\image-20210228210413809.png)
+
+### 思考
+
+> Spring Security 是由各个过滤器组成的过滤器链对请求进行过滤
+>
+> ![QQ截图20180707111356.png](https://mrbird.cc/img/QQ%E6%88%AA%E5%9B%BE20180707111356.png)
+>
+> Spring Security 提供了很多继承了于 `AuthenticationException` 的异常类
+>
+> 在Filter中如果遇到错误，就会抛出这些异常类
+>
+>  
+>
+> 首先 我们没有现有的对验证码过滤的异常类
+>
+> 其次 我们也没有用于校验并抛出该异常类的过滤器
+>
+> 再有 验证码应该在用户密码之前校验
+>
+> 
+>
+> ##### **所以**：我们需要
+>
+> 1. 定义一个验证码的异常类
+> 2. 实现一个验证码的过滤器
+> 3. 这个验证码过滤器要放在用户密码校验前面（UserPasswordAuthenticationFilter过滤链前面）
+
+- #### 6. 定义验证码异常
+
+  ```java
+  //注意AuthenticationException依赖不要导错了 是org.springframework.security.core.AuthenticationException
+  public class ValidateCodeException extends AuthenticationException {
+      public ValidateCodeException(String message) {
+          super(message);
+      }
+  }
+  ```
+
+- #### 7. 验证码校验过滤器
+
+  ```java
+  @Component
+  public class ValidateCodeFilter extends OncePerRequestFilter {
+  
+      @Autowired
+      private AuthenticationFailureHandler authenticationFailureHandler;
+  
+      private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
+  
+      @Override
+      protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
+          if (StringUtils.equalsIgnoreCase("/login", httpServletRequest.getRequestURI())
+                  && StringUtils.equalsIgnoreCase(httpServletRequest.getMethod(), "post")) {
+  
+              try {
+                  validateCode(new ServletWebRequest(httpServletRequest));
+              } catch (ValidateCodeException e) {
+                  authenticationFailureHandler.onAuthenticationFailure(httpServletRequest, httpServletResponse, e);
+                  return;
+              }
+  
+          }
+          filterChain.doFilter(httpServletRequest, httpServletResponse);
+      }
+  }
+  ```
+
+  步骤解析
+
+  1. 首先判断请求的url是不是`/login`并且是post请求
+  2. 通过Session对请求中的验证码进行校验（是否为空，是否存在，是否正确，是否过期）
+     - 成功：执行过滤链 将请求和响应发送给下一个过滤链
+     - 抛出异常，执行`AuthenticationFailureHandler`的失败逻辑并将抛出的异常以参数传给`onAuthenticationFailure`方法
+
+  其中的 `validateCode()`方法
+
+  ```java
+   private void validateCode(ServletWebRequest servletWebRequest) throws ValidateCodeException, ServletRequestBindingException {
+          ImageCode codeInSession = (ImageCode) sessionStrategy.getAttribute(servletWebRequest, ValidateController.SESSION_KEY_IMAGE_CODE);
+          String codeInRequest = ServletRequestUtils.getStringParameter(servletWebRequest.getRequest(), "imageCode");//对应表单提交key
+  
+          if ("".equals(codeInRequest)) {
+              throw new ValidateCodeException("验证码不能为空");
+          }
+  
+          if (codeInSession == null) {
+              throw new ValidateCodeException("验证码不存在");
+          }
+          if (codeInSession.isExpire()) {
+              sessionStrategy.removeAttribute(servletWebRequest, ValidateController.SESSION_KEY_IMAGE_CODE);
+              throw new ValidateCodeException("验证码已过期");
+          }
+  
+          if (!StringUtils.equalsIgnoreCase(codeInSession.getCode(), codeInRequest)) {
+              throw new ValidateCodeException("验证码不正确");
+          }
+          sessionStrategy.removeAttribute(servletWebRequest, ValidateController.SESSION_KEY_IMAGE_CODE);
+      }
+  ```
+
+  其中`imageCode`是前端表单的name属性
+
+- #### 8. 将自定义的过滤器放在用户密码校验过滤器前面
+
+  ```java
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+      http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class) // 添加验证码校验过滤器
+              .formLogin() // 表单登录
+              // http.httpBasic() // HTTP Basic
+              .loginPage("/authentication/require") // 登录跳转 URL
+              .loginProcessingUrl("/login") // 处理表单登录 URL
+              .successHandler(authenticationSucessHandler) // 处理登录成功
+              .failureHandler(authenticationFailureHandler) // 处理登录失败
+              .and()
+              .authorizeRequests() // 授权配置
+              .antMatchers("/authentication/require",
+                      "/login.html",
+                      "/code/image").permitAll() // 无需认证的请求路径
+              .anyRequest()  // 所有请求
+              .authenticated() // 都需要认证
+              .and().csrf().disable();
+  }
+  ```
+
+  
+
+## 添加记住我功能
+
+> ####  总体思路：cookie过期机制+数据库中持久化的token（我感觉用缓存更好）
+
+### 具体步骤
+
+- #### 1. 添加数据库依赖 配置数据源
+
+依赖
+
+```xml
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+```
+
+配置数据源
+
+```yaml
+spring:
+  datasource:
+    password: admin
+    username: root
+    url: jdbc:mysql://localhost:3306/security_studying
+    driver-class-name: com.mysql.cj.jdbc.Driver
+```
+
+
+
+- #### 2. 在继承`WebSecurityConfigurerAdapter`配置类中配置token持久化对象
+
+```java
+@Configuration
+public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private UserDetailService userDetailService;
+    @Autowired
+    private DataSource dataSource;
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setDataSource(dataSource);
+        jdbcTokenRepository.setCreateTableOnStartup(false);
+        return jdbcTokenRepository;
+    }
+    ...
+}
+```
+
+这里使用了Spring Security 的 `PersistentTokenRepository` 持久化token 接口
+
+该接口有两个实现类 `InMemoryTokenRepositoryImpl` 内存存储token 和 `JdbcTokenRepository` 数据库持久化token
+
+![image-20210228224914857](C:\Users\51910\AppData\Roaming\Typora\typora-user-images\image-20210228224914857.png)
+
+这里我们使用数据库持久化，所以要在容器中添加 `JdbcTokenRepository`实例，并给他指定数据源（`setDataSource()`）
+
+其中`setCreateTableOnStartup(boolean b)`方法配置项目启动的时候是否创建保存token的数据表。自己创建，设置为false
+
+![image-20210228225441320](C:\Users\51910\AppData\Roaming\Typora\typora-user-images\image-20210228225441320.png)
+
+这里能看见这个类默认有构建表的语句，如下。这里复制下来手动创建
+
+```sql
+create table persistent_logins (
+    username varchar(64) not null, 
+    series varchar(64) primary key, 
+    token varchar(64) not null, 
+    last_used timestamp not null
+)
+```
+
+- #### 3. 修改登录页
+
+```html
+<input type="checkbox" name="remember-me"/> 记住我
+```
+
+
+
+- #### 4. 在继承了`WebSecurityConfigurerAdapter`的配置类中配置生效
+
+```java
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
+                .formLogin()
+//                .loginPage("/login.html") //配置登录页面请求URL
+                .loginPage("/authentication/require")
+                .loginProcessingUrl("/login") //对应页面表单 form 的action=“/login"
+                .successHandler(authenticationSuccessHandler) //配置成功处理机制
+                .failureHandler(authenticationFailureHandler) //配置失败处理机制
+                .and()
+                //添加记住我功能
+                .rememberMe()
+                .tokenRepository(persistentTokenRepository())//配置token持久化仓库
+                .tokenValiditySeconds(3600) //过期时间 3600秒
+                .userDetailsService(userDetailsService)//处理自动登录逻辑
+                .and()
+                .authorizeRequests() //授权配置
+                .antMatchers("/authentication/require", "/login.html", "/code/image").permitAll() // 跳转 /login.html 请求不会被拦截
+                .anyRequest() //所有请求
+                .authenticated() //都需要认证
+                .and().csrf().disable();
+    }
+```
+
+
+
+这时跑通程序，并勾选记住我登录成功后
+
+![image-20210228230924757](C:\Users\51910\AppData\Roaming\Typora\typora-user-images\image-20210228230924757.png)
+
+cookie中多了一条key为remember-me的记录
+
+![image-20210228231056384](C:\Users\51910\AppData\Roaming\Typora\typora-user-images\image-20210228231056384.png)
+
+在数据库中也同样出现了一条新的记录
+
+在这之后，在cookie未失效之前，该用户无需再次登录就可以访问资源了
