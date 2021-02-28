@@ -1,0 +1,27 @@
+{
+  "authorities": [
+    {
+      "authority": "admin"
+    }
+  ],
+  "details": {
+    "remoteAddress": "0:0:0:0:0:0:0:1",
+    "sessionId": "CE96E37F38DD625710FFFE50826BD5C2"
+  },
+  "authenticated": true,
+  "principal": {
+    "password": null,
+    "username": "xch",
+    "authorities": [
+      {
+        "authority": "admin"
+      }
+    ],
+    "accountNonExpired": true,
+    "accountNonLocked": true,
+    "credentialsNonExpired": true,
+    "enabled": true
+  },
+  "credentials": null,
+  "name": "xch"
+}
