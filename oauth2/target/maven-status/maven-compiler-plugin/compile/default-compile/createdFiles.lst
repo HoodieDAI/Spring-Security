@@ -1,0 +1,6 @@
+com\xch\demo\controller\UserController.class
+com\xch\demo\entity\MyUser.class
+com\xch\demo\service\UserDetailService.class
+com\xch\demo\config\ResourceServerConfig.class
+com\xch\demo\config\AuthorizationServerConfig.class
+com\xch\demo\Oauth2ServerApplication.class

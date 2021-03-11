@@ -308,7 +308,7 @@ public class MyUser implements Serializable {
 
 创建`MyUserDetialService` 实现 `UserDetailService`
 
-```
+```java
 @Configuration
 public class MyUserDetailService implements UserDetailsService {
 
