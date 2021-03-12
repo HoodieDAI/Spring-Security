@@ -1,0 +1,16 @@
+GET http://localhost:8081/index
+
+###
+
+GET http://localhost:8080/index
+
+###
+
+GET http://localhost:8080/code/sms
+
+###
+
+GET http://localhost:8080/code/sms
+
+###
+
